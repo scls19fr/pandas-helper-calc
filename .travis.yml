@@ -7,7 +7,7 @@ matrix:
   include:
   - dist: trusty
     env:
-      - PYTHON=3.5 PANDAS=0.20.3
+      - PYTHON=3.5 PANDAS=0.23.0
   - dist: trusty
     env:
       - PYTHON=3.6 PANDAS=0.23.0
