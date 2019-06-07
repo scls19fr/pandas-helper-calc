@@ -29,6 +29,7 @@ install:
   - conda info -a
   - conda create -q -n test-environment python=$PYTHON coverage setuptools html5lib lxml pytest pytest-cov wrapt
   - source activate test-environment
+  - conda install pandas=$PANDAS;
   - conda list
   - python setup.py install
 
