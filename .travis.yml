@@ -36,7 +36,7 @@ install:
 script:
     - pytest -s -r xX --cov-config .coveragerc --cov=pandas_helper_calc --cov-report xml:/tmp/cov-pandas_helper_calc.xml --junitxml=/tmp/pandas_helper_calc.xml
     - flake8 --version
-    - flake8 pandas_datareader
+    - flake8 setup.py pandas_helper_calc tests
 
 after_success:
   - coveralls
