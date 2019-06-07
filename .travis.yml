@@ -1,0 +1,41 @@
+sudo: false
+
+language: python
+
+matrix:
+  fast_finish: true
+  include:
+  - dist: trusty
+    env:
+      - PYTHON=3.5 PANDAS=0.20.3
+  - dist: trusty
+    env:
+      - PYTHON=3.6 PANDAS=0.23.0
+
+install:
+  - pip install -qq flake8
+  - if [[ "$PYTHON" == "2.7" ]]; then
+      wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+    else
+      wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+    fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda config --add channels pandas
+  - conda update -q conda
+  # Useful for debugging any issues with conda
+  - conda info -a
+  - conda create -q -n test-environment python=$PYTHON coverage setuptools html5lib lxml pytest pytest-cov wrapt
+  - source activate test-environment
+  - conda list
+  - python setup.py install
+
+script:
+    - pytest -s -r xX --cov-config .coveragerc --cov=pandas_helper_calc --cov-report xml:/tmp/cov-pandas_helper_calc.xml --junitxml=/tmp/pandas_helper_calc.xml
+    - flake8 --version
+    - flake8 pandas_datareader
+
+after_success:
+  - coveralls
