@@ -1,5 +1,5 @@
 import pytest
-import pandas_helper_calc
+import pandas_helper_calc  # noqa
 
 import numpy as np
 import pandas as pd
@@ -41,7 +41,8 @@ def test_derivative_Series_with_DateTimeIndex():
     t = np.arange(0, 2 * np.pi + 0.05, 0.05)
     y1 = pd.Series(np.sin(t), index=t)
     t = pd.to_datetime("2019-01-01") + pd.to_timedelta(t, unit="s")
-    dy1dt = y1.calc.derivative()
+
+    dy1dt = y1.calc.derivative()  # noqa
 
 
 def test_derivative_DataFrame_with_DateTimeIndex():
@@ -52,7 +53,7 @@ def test_derivative_DataFrame_with_DateTimeIndex():
     df = pd.DataFrame({"y1": y1, "y2": y2}, index=t)
     df.index.name = "t"
 
-    dfdt = df.calc.derivative()
+    dfdt = df.calc.derivative()  # noqa
 
     # assert_series_equal(dfdt.index, df.index)
 
@@ -85,7 +86,7 @@ def test_integrate_Series_with_DateTimeIndex():
     t = pd.to_datetime("2019-01-01") + pd.to_timedelta(x, unit="s")
 
     y1 = pd.Series(np.sin(x), index=t)
-    y2 = pd.Series(-np.cos(x), index=t)
+    # y2 = pd.Series(-np.cos(x), index=t)
 
     y1.calc.integrate(-1)
 
@@ -97,6 +98,6 @@ def test_integrate_DataFrame_with_DateTimeIndex():
     y1 = np.sin(x)
     y2 = np.cos(x)
 
-    df = pd.DataFrame({"y1": y1, "y2": y2}, index=x)
+    df = pd.DataFrame({"y1": y1, "y2": y2}, index=t)
 
     df.calc.integrate(-1)

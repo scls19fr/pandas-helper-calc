@@ -4,7 +4,7 @@ import pandas as pd
 
 
 @pd.api.extensions.register_series_accessor("calc")
-class CalcAccessor(object):
+class CalcAccessorForSeries(object):
     def __init__(self, pandas_obj):
         self._validate(pandas_obj)
         self._obj = pandas_obj
@@ -39,7 +39,8 @@ class CalcAccessor(object):
             else:
                 s_index = pd.Series(index)
                 s = (
-                    (((self._obj + self._obj.shift()) / 2.0) * s_index.diff().values)
+                    (((self._obj + self._obj.shift()) / 2.0)
+                        * s_index.diff().values)
                     .fillna(0)
                     .cumsum()
                 )
@@ -60,7 +61,7 @@ class CalcAccessor(object):
 
 
 @pd.api.extensions.register_dataframe_accessor("calc")
-class CalcAccessor(object):
+class CalcAccessorForDataFrame(object):
     def __init__(self, pandas_obj):
         self._validate(pandas_obj)
         self._obj = pandas_obj
@@ -73,7 +74,8 @@ class CalcAccessor(object):
         if var is None:
             index = self._obj.index
             if isinstance(index, pd.DatetimeIndex):
-                den = self._obj.index.to_series(keep_tz=True).diff().dt.total_seconds()
+                den = self._obj.index.to_series(keep_tz=True)\
+                    .diff().dt.total_seconds()
             else:
                 den = index.to_series().diff()
             num = self._obj.diff()
