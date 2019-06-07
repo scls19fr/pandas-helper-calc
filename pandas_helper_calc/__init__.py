@@ -21,19 +21,32 @@ class CalcAccessor(object):
             den = index.to_series().diff()
         num = self._obj.diff()
         return num.div(den, axis=0)
-    
+
     def integrate(self, start=None, end=None, var=None):
         index = self._obj.index
 
         if var is None:
             if isinstance(index, pd.DatetimeIndex):
                 s_index = pd.Series(index)
-                s = (((self._obj + self._obj.shift()) / 2.0) * s_index.diff().dt.total_seconds().values).fillna(0).cumsum()
+                s = (
+                    (
+                        ((self._obj + self._obj.shift()) / 2.0)
+                        * s_index.diff().dt.total_seconds().values
+                    )
+                    .fillna(0)
+                    .cumsum()
+                )
             else:
                 s_index = pd.Series(index)
-                s = (((self._obj + self._obj.shift()) / 2.0) * s_index.diff().values).fillna(0).cumsum()
+                s = (
+                    (((self._obj + self._obj.shift()) / 2.0) * s_index.diff().values)
+                    .fillna(0)
+                    .cumsum()
+                )
         else:
-            raise NotImplementedError("Can't integrate with variable different from index")
+            raise NotImplementedError(
+                "Can't integrate with variable different from index"
+            )
 
         if start is None and end is None:
             return s
